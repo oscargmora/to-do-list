@@ -128,6 +128,13 @@ table {
     border-spacing: 0;
 }
 
+/* Custom Font */
+
+@font-face {
+    font-family: 'roboto';
+    src: url('../fonts/Roboto/Roboto-Thin.ttf');
+}
+
 /* Overall Styling */
 
 body {
@@ -137,6 +144,7 @@ body {
     align-items: stretch;
     height: 100vh;
     width: 100vw;
+    font-family: 'roboto';
 }
 
 header,
@@ -155,6 +163,44 @@ header {
     background-color: orange;
 }
 
+/* Sidebar */
+
+sidebar {
+    background-color: orangered;
+    padding: 0.8em 1.8em 0.8em 1.8em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+hr {
+    border-color: black;
+    background-color: black;
+    color: black;
+    width: 100%;
+    border-top: 1px;
+}
+
+.sidebar-buttons,
+#add-task {
+    padding: 0.5em;
+    background: none;
+    border: none;
+    font-family: 'roboto';
+}
+
+.sidebar-buttons:hover,
+#add-task:hover {
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+}
+
 /* Main */
 
 main {
@@ -164,11 +210,14 @@ main {
     box-shadow: inset 0 7px 9px -7px orange;
 }
 
-/* Sidebar */
+#to-do-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-sidebar {
-    background-color: orangered;
-    padding: 0.8em 1.8em 0.8em 1.8em;
+#add-task {
+    font-size: 1em;
 }
 
 /* Main Content */
@@ -191,6 +240,6 @@ footer {
 }
 
 #github-link:hover {
-    color: rgb(45, 45, 45);
+    color: rgba(0, 0, 0, 0.7);
     text-decoration: none;
 }
