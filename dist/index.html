@@ -5,7 +5,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>To-Do List</title>
-        <script src="buttons.bundle.js"></script>
     </head>
     <body>
         <header>
@@ -31,8 +30,13 @@
                     >Projects
                     <hr />
                     <div id="project-content">
+                        <div id="project"></div>
                         <form id="project-form" class="hidden">
-                            <input type="text" id="project-input" />
+                            <input
+                                type="text"
+                                id="project-input"
+                                placeholder="Enter Project Name"
+                            />
                         </form>
                     </div>
                     <button class="sidebar-buttons" id="add-project">
@@ -41,9 +45,44 @@
                 </container>
             </sidebar>
             <main-content>
-                <container id="to-do-content">
-                    <button id="add-task">Add Task</button>
+                <container id="task-content">
+                    <div id="task"></div>
+                    <div class="modalDialog" id="openModal">
+                        <div class="form-popup" id="myForm">
+                            <form id="form-container">
+                                <h1 id="form-header">Add New Task</h1>
+                                <input
+                                    type="text"
+                                    id="title"
+                                    name="title"
+                                    placeholder="Enter Task Here"
+                                />
+                                <input
+                                    type="text"
+                                    id="description"
+                                    name="description"
+                                    placeholder="Description"
+                                />
+                                <input type="date" id="date" name="date" />
+                                <div class="task-form-button-div">
+                                    <button
+                                        class="task-form-button"
+                                        id="submit"
+                                    >
+                                        Submit
+                                    </button>
+                                    <button
+                                        class="task-form-button"
+                                        id="cancel"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </container>
+                <button id="add-task">Add Task</button>
             </main-content>
         </main>
         <footer>
@@ -51,6 +90,6 @@
                 <p>Copyright © 2023 oscargmora</p>
             </a>
         </footer>
-        <script src="index.bundle.js"></script>
+        <div class="overlay" id="overlay"></div>
     </body>
 </html>

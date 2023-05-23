@@ -209,18 +209,38 @@ hr {
     border-top: 1px;
 }
 
+#project {
+    display: flex;
+    flex-direction: column;
+}
+
+#project-input {
+    border: none;
+    border-radius: 2px;
+    background-color: white;
+}
+
+#project-input::--webkit-input-placeholder {
+    color: black;
+}
+
 .sidebar-buttons,
+.sidebar-project-button,
 #add-task {
     padding: 0.5em;
     background: none;
     border: none;
+    border-radius: 4px;
     font-family: 'roboto';
     color: #eaebec;
+    width: 100%;
+    text-align: start;
 }
 
 .sidebar-buttons:hover,
+.sidebar-project-button:hover,
 #add-task:hover {
-    color: #d2d4d5;
+    background-color: #2d4356;
     cursor: pointer;
 }
 
@@ -235,10 +255,121 @@ main {
     color: #eaebec;
 }
 
-#to-do-content {
+#task-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay.active {
+    display: block;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, 5%);
+    z-index: 9;
+    border-radius: 10px;
+}
+
+#form-container {
+    max-width: 280px;
+    padding: 20px;
+    background-color: #192734;
+    border-radius: 20px;
+    font-family: 'roboto';
+}
+
+#form-header {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 0.5em;
+    font-size: 2em;
+    text-align: center;
+}
+
+#form-container input[type='text'],
+#form-container input[type='date'] {
+    width: 18.5em;
+    padding: 15px;
+    margin: 5px 0 20px 0;
+    border: none;
+    background: #233647;
+    border-radius: 10px;
+    font-family: roboto;
+    color: #dbdbdb;
+}
+
+#title::placeholder,
+#description::placeholder {
+    color: #dbdbdb;
+    opacity: 1; /* Firefox */
+}
+
+#title::-ms-input-placeholder,
+#description::-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #dbdbdb;
+}
+
+#title::-ms-input-placeholder,
+#description::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #dbdbdb;
+}
+
+#title::-webkit-calendar-picker-indicator,
+#description::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.task-form-button-div {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
+.task-form-button {
+    margin-top: 1em;
+    border: none;
+    border-radius: 2px;
+    height: 2em;
+    width: 100%;
+    color: #dbdbdb;
+    font-weight: bold;
+}
+
+#submit {
+    background-color: #1f8d4d;
+}
+
+#submit:hover {
+    cursor: pointer;
+    background-color: #1c7842;
+}
+
+#cancel {
+    background-color: #be0404;
+}
+
+#cancel:hover {
+    cursor: pointer;
+    background-color: #a50505;
 }
 
 #add-task {
@@ -249,6 +380,13 @@ main {
 
 main-content {
     padding: 0.8em 1.8em 0.8em 1.8em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#task-form {
+    display: grid;
 }
 
 /* Footer */
