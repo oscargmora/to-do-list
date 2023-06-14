@@ -1,4 +1,4 @@
 import './style.css';
-import clickButton from './buttons';
+import eventListeners from './buttons';
 
-clickButton();
+eventListeners();

@@ -1,18 +1,18 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true
-    },
-    "overrides": [
-    ],
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
-    "rules": {
-    },
-    "extends": [
-        "airbnb-base",
-        "prettier"
-    ]
+  "env": {
+      "browser": true,
+      "commonjs": true,
+      "es2021": true
+  },
+  "overrides": [
+  ],
+  "parserOptions": {
+      "ecmaVersion": "latest"
+  },
+  "rules": {
+  },
+  "extends": [
+      "airbnb-base",
+      "prettier"
+  ]
 }
