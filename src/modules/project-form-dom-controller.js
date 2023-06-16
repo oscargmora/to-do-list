@@ -1,4 +1,4 @@
-import addProjectToArray from './append-project-to-array';
+import { addProjectToArray } from './project-array';
 
 const projectForm = document.querySelector('#project-form');
 const projectInput = document.querySelector('#project-input');
