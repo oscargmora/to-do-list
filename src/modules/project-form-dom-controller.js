@@ -9,17 +9,18 @@ function openProjectForm() {
 }
 
 function hideProjectForm() {
+    projectInput.value = '';
     projectForm.classList.add('hidden');
 }
 
 function submitProjectForm(e) {
     e.preventDefault();
     addProjectToArray(projectInput.value);
+    hideProjectForm();
 }
 
 function cancelProjectForm(e) {
     e.preventDefault();
-    projectInput.value = '';
     hideProjectForm();
 }
 

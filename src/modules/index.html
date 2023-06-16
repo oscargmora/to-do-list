@@ -8,7 +8,7 @@
     </head>
     <body>
         <header>
-            <img src="<%=require('../img/report.png')%>" class="header-img" />
+            <img src="<%=require('..//img/report.png')%>" class="header-img" />
             <container id="title" class="header-container"
                 >To-Do List</container
             >
@@ -19,19 +19,16 @@
                     >Home
                     <hr />
                     <button
-                        class="sidebar-buttons main-header-title selected"
+                        class="sidebar-button main-header-title selected"
                         id="all-tasks"
                     >
                         All Tasks
                     </button>
-                    <button
-                        class="sidebar-buttons main-header-title"
-                        id="today"
-                    >
+                    <button class="sidebar-button main-header-title" id="today">
                         Today
                     </button>
                     <button
-                        class="sidebar-buttons main-header-title"
+                        class="sidebar-button main-header-title"
                         id="this-week"
                     >
                         This Week
@@ -88,7 +85,7 @@
                             </container>
                         </form>
                     </div>
-                    <button class="sidebar-buttons" id="add-project">
+                    <button class="sidebar-button" id="add-project">
                         Add Project
                     </button>
                 </container>

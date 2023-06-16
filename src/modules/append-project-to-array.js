@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import getProjects from './project-array';
+import addProjectToDom from './project-dom-controller';
 
 const getMyProjects = getProjects();
 
@@ -22,7 +23,8 @@ class Project {
 function addProjectToArray(userInput) {
     const newProject = new Project(userInput);
     const projectId = newProject.id;
-    console.log(projectId);
+    getMyProjects.push(newProject);
+    addProjectToDom(projectId);
 }
 
 export default addProjectToArray;
