@@ -62,18 +62,22 @@ function removeProjectArray(e) {
 
 function addEditToDOM(projectButton, selectedProjectName) {
     const name = projectButton.firstChild;
+    const editProjectInput = document.querySelector('#edit-project-input');
+
     name.innerText = selectedProjectName;
+    editProjectInput.value = '';
 
     editProjectForm.classList.add('hidden');
     projectButton.classList.remove('hidden');
-    console.log(projectButton);
+    editProjectInput.value = '';
+    console.log(myProjects);
 }
 
 function editProjectArray(e) {
     e.preventDefault();
     const editProjectInput = document.querySelector('#edit-project-input');
     const projectButton =
-        getTargetParentElement(e).parentElement.nextSibling.nextSibling;
+        getTargetParentElement(e).parentElement.previousSibling;
     const projectButtonDataId = projectButton.getAttribute('data-id');
     const selectedProject = findObjectInArray(projectButtonDataId);
     selectedProject.name = editProjectInput.value;
@@ -82,10 +86,15 @@ function editProjectArray(e) {
 
 function editProjectFormOpener(e) {
     const projectButton = getTargetParentElement(e);
+    const editProjectInput = document.querySelector('#edit-project-input');
     insertAfter(editProjectForm, projectButton);
     projectButton.classList.add('hidden');
-    console.log(projectButton);
     editProjectForm.classList.remove('hidden');
+    editProjectInput.focus();
+}
+
+function cancelEditProject(e) {
+    e.preventDefault();
 }
 
 function createElementsInProjectButton(newProject, projectButton) {
@@ -135,6 +144,10 @@ function addProjectToArray(userInput) {
 document
     .querySelector('#edit-sidebar-submit')
     .addEventListener('click', editProjectArray);
+
+document
+    .querySelector('#edit-sidebar-cancel')
+    .addEventListener('click', cancelEditProject);
 
 export {
     editProjectArray,
