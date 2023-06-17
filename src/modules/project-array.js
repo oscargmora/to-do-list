@@ -69,8 +69,6 @@ function addEditToDOM(projectButton, selectedProjectName) {
 
     editProjectForm.classList.add('hidden');
     projectButton.classList.remove('hidden');
-    editProjectInput.value = '';
-    console.log(myProjects);
 }
 
 function editProjectArray(e) {
@@ -95,6 +93,12 @@ function editProjectFormOpener(e) {
 
 function cancelEditProject(e) {
     e.preventDefault();
+    const projectButton =
+        getTargetParentElement(e).parentElement.previousSibling;
+    const editProjectInput = document.querySelector('#edit-project-input');
+    editProjectInput.value = '';
+    projectButton.classList.remove('hidden');
+    editProjectForm.classList.add('hidden');
 }
 
 function createElementsInProjectButton(newProject, projectButton) {
