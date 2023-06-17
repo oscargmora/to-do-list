@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import _ from 'lodash';
 
+const editProjectForm = document.querySelector('.edit-project-form');
+
 let myProjects = [];
 
 class Project {
@@ -40,19 +42,15 @@ function getTargetParentElementId(e) {
     return projectButtonDataId;
 }
 
-// Edit/Remove Button Functionality
-
-function editProjectDOM(e) {
-    const projectButton = getTargetParentElement(e);
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 }
+
+// Edit/Remove Button Functionality
 
 function removeProjectDOM(e) {
     const projectButton = getTargetParentElement(e);
     projectButton.remove();
-}
-
-function editProjectArray(e) {
-    const projectButtonDataId = getTargetParentElementId(e);
 }
 
 function removeProjectArray(e) {
@@ -60,6 +58,34 @@ function removeProjectArray(e) {
     const selectedProject = findObjectInArray(projectButtonDataId);
     myProjects = _.reject(myProjects, (project) => project === selectedProject);
     removeProjectDOM(e);
+}
+
+function addEditToDOM(projectButton, selectedProjectName) {
+    const name = projectButton.firstChild;
+    name.innerText = selectedProjectName;
+
+    editProjectForm.classList.add('hidden');
+    projectButton.classList.remove('hidden');
+    console.log(projectButton);
+}
+
+function editProjectArray(e) {
+    e.preventDefault();
+    const editProjectInput = document.querySelector('#edit-project-input');
+    const projectButton =
+        getTargetParentElement(e).parentElement.nextSibling.nextSibling;
+    const projectButtonDataId = projectButton.getAttribute('data-id');
+    const selectedProject = findObjectInArray(projectButtonDataId);
+    selectedProject.name = editProjectInput.value;
+    addEditToDOM(projectButton, selectedProject.name);
+}
+
+function editProjectFormOpener(e) {
+    const projectButton = getTargetParentElement(e);
+    insertAfter(editProjectForm, projectButton);
+    projectButton.classList.add('hidden');
+    console.log(projectButton);
+    editProjectForm.classList.remove('hidden');
 }
 
 function createElementsInProjectButton(newProject, projectButton) {
@@ -74,7 +100,7 @@ function createElementsInProjectButton(newProject, projectButton) {
     edit.innerText = 'Edit';
     remove.innerText = 'Remove';
 
-    edit.addEventListener('click', editProjectArray);
+    edit.addEventListener('click', editProjectFormOpener);
     remove.addEventListener('click', removeProjectArray);
 
     projectButton.append(name, edit, remove);
@@ -105,6 +131,10 @@ function addProjectToArray(userInput) {
     myProjects.push(newProject);
     addProjectToDom(projectId);
 }
+
+document
+    .querySelector('#edit-sidebar-submit')
+    .addEventListener('click', editProjectArray);
 
 export {
     editProjectArray,
