@@ -309,11 +309,14 @@ hr {
 .edit-project-button {
     background: none;
     border: none;
+    color: var(--textColor);
+    font-family: roboto;
 }
 
 .remove-project-button:hover,
 .edit-project-button:hover {
     cursor: pointer;
+    color: rgba(255, 255, 255, 0.528);
 }
 
 /* Main */
@@ -510,7 +513,7 @@ main-content {
     height: 36px;
     left: 15px;
     position: absolute;
-    top: 19px;
+    top: 15px;
     width: 36px;
 }
 
@@ -541,6 +544,11 @@ main-content {
     opacity: 1;
 }
 
+.taskCard p,
+.taskCard date {
+    align-self: center;
+}
+
 .titleCard,
 .dateCard {
     align-self: center;
@@ -550,15 +558,13 @@ main-content {
     justify-self: center;
 }
 
-.removeCard,
-.editCard {
+.taskCard button {
     border: none;
     background: none;
     justify-self: center;
 }
 
-.removeCard:hover,
-.editCard:hover {
+.taskCard button:hover {
     cursor: pointer;
 }
 

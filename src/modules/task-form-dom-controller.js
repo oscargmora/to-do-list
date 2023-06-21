@@ -22,13 +22,13 @@ function closeForm() {
     date.value = '';
 }
 
-function submitProjectForm(e) {
+function submitTaskForm(e) {
     e.preventDefault();
     addTaskToArray(taskTitle.value, description.value, date.value);
     closeForm();
 }
 
-function cancelProjectForm(e) {
+function cancelTaskForm(e) {
     e.preventDefault();
     closeForm();
 }
@@ -38,7 +38,7 @@ function openTaskForm() {
     taskTitle.focus();
 }
 
-document.querySelector('#submit').addEventListener('click', submitProjectForm);
-document.querySelector('#cancel').addEventListener('click', cancelProjectForm);
+document.querySelector('#submit').addEventListener('click', submitTaskForm);
+document.querySelector('#cancel').addEventListener('click', cancelTaskForm);
 
 export default openTaskForm;

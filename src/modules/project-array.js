@@ -106,6 +106,7 @@ function createElementsInProjectButton(newProject, projectButton) {
     const edit = document.createElement('button');
     const remove = document.createElement('button');
 
+    name.classList.add('main-header-title');
     edit.classList.add('edit-project-button');
     remove.classList.add('remove-project-button');
 
