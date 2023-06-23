@@ -16,6 +16,10 @@ class Task {
 
 // Helper Functions
 
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
+
 function findObjectInArray(taskId) {
     const newTaskArray = myTasks.filter((task) => task.id === taskId);
     const newTask = newTaskArray[0];
@@ -60,6 +64,8 @@ function createCheckBox() {
     return div;
 }
 
+// Remove Task Functionality
+
 function removeTaskDOM(e) {
     const task = getTargetParentElement(e);
     task.remove();
@@ -71,6 +77,62 @@ function removeTaskFromArray(e) {
     myTasks = _.reject(myTasks, (task) => task === selectedTask);
     removeTaskDOM(e);
 }
+
+// Edit Task Functionality
+
+function closeForm() {
+    const overlay = document.querySelector('#overlay');
+    const myForm = document.querySelector('#myEditForm');
+    const taskTitle = document.querySelector('#task-edit-title');
+    const description = document.querySelector('#edit-description');
+    const date = document.querySelector('#edit-date');
+
+    overlay.classList.remove('active');
+    myForm.style.display = 'none';
+
+    taskTitle.value = '';
+    description.value = '';
+    date.value = '';
+}
+
+function openForm(e) {
+    const overlay = document.querySelector('#overlay');
+    const myForm = document.querySelector('#myEditForm');
+    const taskTitle = document.querySelector('#task-edit-title');
+    const task = getTargetParentElement(e);
+
+    insertAfter(myForm, task);
+
+    myForm.style.display = 'block';
+    overlay.classList.add('active');
+    taskTitle.focus();
+}
+
+function cancelTaskForm(e) {
+    e.preventDefault();
+    closeForm();
+}
+
+function submitTaskForm(e) {
+    const taskTitle = document.querySelector('#task-edit-title');
+    const description = document.querySelector('#edit-description');
+    const date = document.querySelector('#edit-date');
+
+    e.preventDefault();
+
+    const task =
+        e.target.parentElement.parentElement.parentElement.previousSibling;
+    const taskId = task.getAttribute('data-id');
+    const editedTask = findObjectInArray(taskId);
+
+    editedTask.title = taskTitle.value;
+    editedTask.description = description.value;
+    editedTask.date = date.value;
+
+    closeForm();
+}
+
+// Create New Task
 
 function createElementsInTaskDiv(taskId, titleInput, dateInput) {
     const taskDiv = document.createElement('div');
@@ -96,7 +158,7 @@ function createElementsInTaskDiv(taskId, titleInput, dateInput) {
     editButton.style.height = '3em';
 
     removeButton.addEventListener('click', removeTaskFromArray);
-    // editButton.addEventListener('click', editTask);
+    editButton.addEventListener('click', openForm);
 
     taskDiv.append(checkboxDiv, title, date, editButton, removeButton);
     return taskDiv;
@@ -117,5 +179,12 @@ function addTaskToArray(titleInput, descriptionInput, dateInput) {
     myTasks.push(newTask);
     addTaskToDom(taskId, titleInput, dateInput);
 }
+
+document
+    .querySelector('#edit-submit')
+    .addEventListener('click', submitTaskForm);
+document
+    .querySelector('#edit-cancel')
+    .addEventListener('click', cancelTaskForm);
 
 export default addTaskToArray;

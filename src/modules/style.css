@@ -450,14 +450,14 @@ main {
 #submit,
 #sidebar-submit,
 #edit-sidebar-submit,
-.edit-submit {
+#edit-submit {
     background-color: #1f8d4d;
 }
 
 #submit:hover,
 #sidebar-submit:hover,
 #edit-sidebar-submit:hover,
-.edit-submit:hover {
+#edit-submit:hover {
     cursor: pointer;
     background-color: #1c7842;
 }

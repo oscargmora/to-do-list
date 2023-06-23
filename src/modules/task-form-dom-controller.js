@@ -11,6 +11,7 @@ const date = document.querySelector('#date');
 function openForm() {
     myForm.style.display = 'block';
     overlay.classList.add('active');
+    taskTitle.focus();
 }
 
 function closeForm() {
@@ -33,12 +34,7 @@ function cancelTaskForm(e) {
     closeForm();
 }
 
-function openTaskForm() {
-    openForm();
-    taskTitle.focus();
-}
-
 document.querySelector('#submit').addEventListener('click', submitTaskForm);
 document.querySelector('#cancel').addEventListener('click', cancelTaskForm);
 
-export default openTaskForm;
+export default openForm;
