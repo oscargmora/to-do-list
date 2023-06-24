@@ -20,8 +20,9 @@ function insertAfter(newNode, existingNode) {
     existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 }
 
-function findObjectInArray(taskId) {
-    const newTaskArray = myTasks.filter((task) => task.id === taskId);
+function findObjectInArray(task) {
+    const taskId = task.getAttribute('data-id');
+    const newTaskArray = myTasks.filter((newTask) => newTask.id === taskId);
     const newTask = newTaskArray[0];
     return newTask;
 }
@@ -31,17 +32,10 @@ function getTargetParentElement(e) {
     return task;
 }
 
-function getTargetParentElementId(e) {
-    const task = e.target.parentElement;
-    const taskDataId = task.getAttribute('data-id');
-    return taskDataId;
-}
-
 function changeCompleteStatus(e) {
     const round = getTargetParentElement(e);
     const task = round.parentElement;
-    const taskId = task.getAttribute('data-id');
-    const taskArray = findObjectInArray(taskId);
+    const taskArray = findObjectInArray(task);
     taskArray.complete = !taskArray.complete;
 }
 
@@ -72,13 +66,40 @@ function removeTaskDOM(e) {
 }
 
 function removeTaskFromArray(e) {
-    const taskId = getTargetParentElementId(e);
-    const selectedTask = findObjectInArray(taskId);
-    myTasks = _.reject(myTasks, (task) => task === selectedTask);
+    const task = getTargetParentElement(e);
+    const selectedTask = findObjectInArray(task);
+    myTasks = _.reject(
+        myTasks,
+        (modifiedTask) => modifiedTask === selectedTask
+    );
     removeTaskDOM(e);
 }
 
 // Edit Task Functionality
+
+function addEditToDOM(task, title, date) {
+    const titleDOM = task.firstChild.nextSibling;
+    const dateDOM = titleDOM.nextSibling;
+
+    titleDOM.innerText = title;
+    dateDOM.innerText = date;
+}
+
+function addEditToArray(e) {
+    const taskTitle = document.querySelector('#task-edit-title');
+    const description = document.querySelector('#edit-description');
+    const date = document.querySelector('#edit-date');
+
+    const task =
+        e.target.parentElement.parentElement.parentElement.previousSibling;
+    const editedTask = findObjectInArray(task);
+
+    editedTask.title = taskTitle.value;
+    editedTask.description = description.value;
+    editedTask.date = date.value;
+
+    addEditToDOM(task, editedTask.title, editedTask.date);
+}
 
 function closeForm() {
     const overlay = document.querySelector('#overlay');
@@ -99,7 +120,14 @@ function openForm(e) {
     const overlay = document.querySelector('#overlay');
     const myForm = document.querySelector('#myEditForm');
     const taskTitle = document.querySelector('#task-edit-title');
+    const editDescription = document.querySelector('#edit-description');
+    const editDate = document.querySelector('#edit-date');
     const task = getTargetParentElement(e);
+    const userInputtedForm = findObjectInArray(task);
+
+    taskTitle.value = userInputtedForm.title;
+    editDescription.value = userInputtedForm.description;
+    editDate.value = userInputtedForm.date;
 
     insertAfter(myForm, task);
 
@@ -114,21 +142,8 @@ function cancelTaskForm(e) {
 }
 
 function submitTaskForm(e) {
-    const taskTitle = document.querySelector('#task-edit-title');
-    const description = document.querySelector('#edit-description');
-    const date = document.querySelector('#edit-date');
-
     e.preventDefault();
-
-    const task =
-        e.target.parentElement.parentElement.parentElement.previousSibling;
-    const taskId = task.getAttribute('data-id');
-    const editedTask = findObjectInArray(taskId);
-
-    editedTask.title = taskTitle.value;
-    editedTask.description = description.value;
-    editedTask.date = date.value;
-
+    addEditToArray(e);
     closeForm();
 }
 
