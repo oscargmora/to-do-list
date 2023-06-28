@@ -88,6 +88,7 @@ function editProjectFormOpener(e) {
     insertAfter(editProjectForm, projectButton);
     projectButton.classList.add('hidden');
     editProjectForm.classList.remove('hidden');
+    editProjectInput.value = e.target.previousSibling.innerText;
     editProjectInput.focus();
 }
 

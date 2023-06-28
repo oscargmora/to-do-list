@@ -2,6 +2,8 @@ import _ from 'lodash';
 import editImg from '../img/pencil.png';
 import trashImg from '../img/trash-bin.png';
 
+// figure out how to export this array to project-array to link tasks with projects
+
 let myTasks = [];
 
 class Task {
@@ -134,6 +136,14 @@ function openForm(e) {
     myForm.style.display = 'block';
     overlay.classList.add('active');
     taskTitle.focus();
+
+    // Close form if clicked outside of form
+    // eslint-disable-next-line func-names
+    window.onclick = function (event) {
+        if (event.target === overlay) {
+            closeForm();
+        }
+    };
 }
 
 function cancelTaskForm(e) {

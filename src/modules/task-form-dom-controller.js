@@ -8,7 +8,7 @@ const date = document.querySelector('#date');
 
 // Helper Functions
 
-function openForm() {
+function openTaskForm() {
     myForm.style.display = 'block';
     overlay.classList.add('active');
     taskTitle.focus();
@@ -37,4 +37,12 @@ function cancelTaskForm(e) {
 document.querySelector('#submit').addEventListener('click', submitTaskForm);
 document.querySelector('#cancel').addEventListener('click', cancelTaskForm);
 
-export default openForm;
+// Close form if clicked outside of form
+// eslint-disable-next-line func-names
+window.onclick = function (event) {
+    if (event.target === overlay) {
+        closeForm();
+    }
+};
+
+export default openTaskForm;
