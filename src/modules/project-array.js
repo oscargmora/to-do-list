@@ -20,14 +20,6 @@ class Project {
         this.id = `${Date.now()}`;
         this._tasks = [];
     }
-
-    addTask(task) {
-        this._tasks.push(task);
-    }
-
-    removeTask(task, taskId) {
-        this._tasks = this._tasks.filter((t) => t.id !== taskId);
-    }
 }
 
 // Append Tasks to Project Array
@@ -70,18 +62,27 @@ function displayTasksForProject() {
     // Clear the task container
     taskContainer.innerHTML = '';
 
-    const chosenProjectArray = myProjects.findIndex(
-        (project) => project.id === projectId
-    );
-    console.log(chosenProjectArray);
-
     // Create and append task cards for each task in the project
     projectTasks.forEach((task) => {
         const taskDiv = createTaskDiv(task);
         taskContainer.appendChild(taskDiv);
-        chosenProjectArray.push(task);
     });
     console.log(myProjects);
+}
+
+function appendTasksToProjectArray() {
+    const projectId = this.getAttribute('data-id');
+    const projectTasks = myTasks.filter((task) => task.projectId === projectId);
+
+    const chosenProjectArray = myProjects.findIndex(
+        (project) => project.id === projectId
+    );
+
+    projectTasks.forEach((task) => {
+        if (chosenProjectArray !== -1) {
+            myProjects[chosenProjectArray]._tasks.push(task);
+        }
+    });
 }
 
 // Helper Functions
