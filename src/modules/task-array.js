@@ -1,18 +1,18 @@
-import _ from 'lodash';
 import editImg from '../img/pencil.png';
 import trashImg from '../img/trash-bin.png';
 
 // figure out how to export this array to project-array to link tasks with projects
 
-let myTasks = [];
+const myTasks = [];
 
 class Task {
-    constructor(title, description, date) {
+    constructor(title, description, date, projectId) {
         this.title = title;
         this.description = description;
         this.date = date;
         this.id = `${Date.now()}`;
         this.complete = false;
+        this.projectId = projectId;
     }
 }
 
@@ -70,10 +70,10 @@ function removeTaskDOM(e) {
 function removeTaskFromArray(e) {
     const task = getTargetParentElement(e);
     const selectedTask = findObjectInArray(task);
-    myTasks = _.reject(
-        myTasks,
-        (modifiedTask) => modifiedTask === selectedTask
-    );
+    const taskToRemove = myTasks.findIndex((obj) => obj.id === selectedTask.id);
+    if (taskToRemove !== -1) {
+        myTasks.splice(taskToRemove, 1);
+    }
     removeTaskDOM(e);
 }
 
@@ -198,8 +198,13 @@ function addTaskToDom(taskId, titleInput, dateInput) {
     taskContainer.appendChild(task);
 }
 
-function addTaskToArray(titleInput, descriptionInput, dateInput) {
-    const newTask = new Task(titleInput, descriptionInput, dateInput);
+function addTaskToArray(titleInput, descriptionInput, dateInput, projectId) {
+    const newTask = new Task(
+        titleInput,
+        descriptionInput,
+        dateInput,
+        projectId
+    );
     const taskId = newTask.id;
     myTasks.push(newTask);
     addTaskToDom(taskId, titleInput, dateInput);
@@ -212,4 +217,10 @@ document
     .querySelector('#edit-cancel')
     .addEventListener('click', cancelTaskForm);
 
-export default addTaskToArray;
+export {
+    addTaskToArray,
+    myTasks,
+    removeTaskFromArray,
+    openForm,
+    createCheckBox
+};

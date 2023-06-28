@@ -1,7 +1,16 @@
 /* eslint-disable no-underscore-dangle */
 import _ from 'lodash';
+import editImg from '../img/pencil.png';
+import trashImg from '../img/trash-bin.png';
+import {
+    myTasks,
+    removeTaskFromArray,
+    openForm,
+    createCheckBox
+} from './task-array';
 
 const editProjectForm = document.querySelector('.edit-project-form');
+const taskContainer = document.querySelector('#task');
 
 let myProjects = [];
 
@@ -19,6 +28,60 @@ class Project {
     removeTask(task, taskId) {
         this._tasks = this._tasks.filter((t) => t.id !== taskId);
     }
+}
+
+// Append Tasks to Project Array
+
+function createTaskDiv(task) {
+    const taskDiv = document.createElement('div');
+    const checkboxDiv = createCheckBox();
+    const title = document.createElement('p');
+    const date = document.createElement('date');
+    const editButton = document.createElement('button');
+    const removeButton = document.createElement('button');
+
+    taskDiv.setAttribute('data-id', task.id);
+    taskDiv.classList.add('taskCard');
+
+    title.innerText = task.title;
+    date.innerText = task.date;
+
+    removeButton.style.backgroundImage = `url(${trashImg})`;
+    removeButton.style.backgroundSize = 'cover';
+    removeButton.style.width = '3em';
+    removeButton.style.height = '3em';
+
+    editButton.style.backgroundImage = `url(${editImg})`;
+    editButton.style.backgroundSize = 'cover';
+    editButton.style.width = '3em';
+    editButton.style.height = '3em';
+
+    removeButton.addEventListener('click', removeTaskFromArray);
+    editButton.addEventListener('click', openForm);
+
+    taskDiv.append(checkboxDiv, title, date, editButton, removeButton);
+    return taskDiv;
+}
+
+function displayTasksForProject() {
+    const projectId = this.getAttribute('data-id');
+    const projectTasks = myTasks.filter((task) => task.projectId === projectId);
+
+    // Clear the task container
+    taskContainer.innerHTML = '';
+
+    const chosenProjectArray = myProjects.findIndex(
+        (project) => project.id === projectId
+    );
+    console.log(chosenProjectArray);
+
+    // Create and append task cards for each task in the project
+    projectTasks.forEach((task) => {
+        const taskDiv = createTaskDiv(task);
+        taskContainer.appendChild(taskDiv);
+        chosenProjectArray.push(task);
+    });
+    console.log(myProjects);
 }
 
 // Helper Functions
@@ -107,7 +170,6 @@ function createElementsInProjectButton(newProject, projectButton) {
     const edit = document.createElement('button');
     const remove = document.createElement('button');
 
-    name.classList.add('main-header-title');
     edit.classList.add('edit-project-button');
     remove.classList.add('remove-project-button');
 
@@ -131,9 +193,12 @@ function addProjectToDom(projectId) {
     const projectButton = document.createElement('button');
 
     projectButton.classList.add('sidebar-button');
+    projectButton.classList.add('main-header-title');
     projectButton.setAttribute('data-id', projectId);
 
     createElementsInProjectButton(newProject, projectButton);
+
+    projectButton.addEventListener('click', displayTasksForProject);
 
     // Append New Project Elements
 

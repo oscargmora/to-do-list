@@ -1,4 +1,4 @@
-import addTaskToArray from './task-array';
+import { addTaskToArray } from './task-array';
 
 const overlay = document.querySelector('#overlay');
 const myForm = document.querySelector('#myForm');
@@ -25,7 +25,10 @@ function closeForm() {
 
 function submitTaskForm(e) {
     e.preventDefault();
-    addTaskToArray(taskTitle.value, description.value, date.value);
+    const projectId = document
+        .querySelector('.selected')
+        .getAttribute('data-id');
+    addTaskToArray(taskTitle.value, description.value, date.value, projectId);
     closeForm();
 }
 

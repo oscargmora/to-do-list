@@ -5,7 +5,14 @@ const mainHeaderUpdate = () => {
         const target = e.target.closest('.main-header-title');
 
         if (target) {
-            mainHeader.innerText = target.innerText;
+            const mainHeaderTitle =
+                document.querySelectorAll('.main-header-title');
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0; i < mainHeaderTitle.length; i++) {
+                mainHeaderTitle[i].classList.remove('selected');
+            }
+            target.classList.add('selected');
+            mainHeader.innerText = target.firstElementChild.innerText;
         }
     });
 };
