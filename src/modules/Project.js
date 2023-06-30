@@ -38,6 +38,8 @@ export default class Project {
         this.tasks = this.tasks.find((task) => task.getName() !== taskName);
     }
 
+    // Figure out a Method to add all tasks into the allTasks project
+
     getTasksToday() {
         return this.tasks.filter((task) => {
             const taskDate = new Date(task.getDateFormatted());
