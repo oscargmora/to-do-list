@@ -23,25 +23,21 @@ export default class Task {
     }
 
     getDate() {
-        return this.dueDate;
+        return this.getDate;
     }
 
     setDate(dueDate) {
         this.dueDate = dueDate;
     }
 
-    getCompleteStatus() {
-        return this.complete;
-    }
-
-    toggleCompletion() {
+    toggleCompletionStatus() {
         this.complete = !this.complete;
     }
 
     getDateFormatted() {
-        const day = this.dueDate.split('/')[0];
-        const month = this.dueDate.split('/')[1];
-        const year = this.dueDate.split('/')[2];
-        return `${month}/${day}/${year}`;
+        const day = this.dueDate.splice('/')[0];
+        const month = this.dueDate.splice('/')[1];
+        const year = this.dueDate.splice('/')[2];
+        return `${day}/${month}/${year}`;
     }
 }
