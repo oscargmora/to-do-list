@@ -10,6 +10,8 @@ export default class UI {
         UI.initAddProjectButtons();
         UI.initProjectButtons();
         UI.initEditProjectButtons();
+        UI.initAddTaskButtons();
+        UI.openProject('All Tasks', document.querySelector('#all-tasks'));
     }
 
     // CREATE PROJECT
@@ -24,12 +26,12 @@ export default class UI {
             .getProjects()
             .forEach((project) => {
                 if (
-                    project.name !== 'All Tasks' ||
-                    project.name !== 'Today' ||
-                    project.name !== 'This Week'
-                ) {
-                    UI.createProjectButton(project.name);
-                }
+                    project.name === 'All Tasks' ||
+                    project.name === 'Today' ||
+                    project.name === 'This Week'
+                )
+                    return;
+                UI.createProjectButton(project.name);
             });
     }
 
@@ -113,7 +115,6 @@ export default class UI {
         Storage.addProject(new Project(projectName));
         UI.createProjectButton(projectName);
         UI.closeProjectForm();
-        console.log(Storage.getTodoList().getProjects());
     }
 
     static cancelProjectSubmission(e) {
@@ -215,14 +216,37 @@ export default class UI {
 
     static openAllTasksProjectsButton() {
         Storage.updateAllTasksProject();
+        UI.openProject('All Tasks', this);
     }
 
     static openTodayProjectsButton() {
         Storage.updateTodayProject();
+        UI.openProject('Today', this);
     }
 
     static openWeekProjectsButton() {
         Storage.updateWeekProject();
+        UI.openProject('This Week', this);
+    }
+
+    static loadProjectContent(projectName) {
+        const mainHeader = document.querySelector('#main-header');
+
+        mainHeader.innerText = projectName;
+    }
+
+    static openProject(projectName, projectButton) {
+        const defaultProjectButtons =
+            document.querySelectorAll('.sidebar-buttons');
+        const projectButtons = document.querySelectorAll(
+            '.sidebar-project-button'
+        );
+        const buttons = [...defaultProjectButtons, ...projectButtons];
+
+        buttons.forEach((button) => button.classList.remove('selected'));
+        projectButton.classList.add('selected');
+
+        UI.loadProjectContent(projectName);
     }
 
     static handleProjectButton(e) {
@@ -232,5 +256,53 @@ export default class UI {
         )
             return;
         const projectName = this.firstElementChild.innerText;
+
+        UI.openProject(projectName, this);
+    }
+
+    // ADD TASK EVENT LISTENERS
+
+    static initAddTaskButtons() {
+        const addTaskButton = document.querySelector('#add-task');
+
+        addTaskButton.addEventListener('click', UI.openAddTaskForm);
+    }
+
+    static openAddTaskForm() {
+        document.querySelector('#overlay').classList.add('active');
+        document.querySelector('#myForm').style.display = 'block';
+        document.querySelector('#task-title').focus();
+
+        const addTask = document.querySelector('#submit');
+        const cancelTaskSubmission = document.querySelector('#cancel');
+
+        addTask.addEventListener('click', UI.addTask);
+        cancelTaskSubmission.addEventListener('click', UI.cancelTaskSubmission);
+    }
+
+    static closeAddTaskForm() {
+        document.querySelector('#task-title').value = '';
+        document.querySelector('#description').value = '';
+        document.querySelector('#date').value = '';
+        document.querySelector('#overlay').classList.remove('active');
+        document.querySelector('#myForm').style.display = 'none';
+    }
+
+    static addTask(e) {
+        e.preventDefault();
+
+        const projectName = document.querySelector('#main-header').innerText;
+        const taskName = document.querySelector('#task-title').value;
+        const description = document.querySelector('#description').value;
+        const date = document.querySelector('#date').value;
+
+        Storage.addTask(projectName, new Task(taskName, description, date));
+        console.log(Storage.getTodoList().getProjects());
+        UI.closeAddTaskForm();
+    }
+
+    static cancelTaskSubmission(e) {
+        e.preventDefault();
+        UI.closeAddTaskForm();
     }
 }
