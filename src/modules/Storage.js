@@ -33,37 +33,43 @@ export default class Storage {
     }
 
     static addProject(project) {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.addProject(project);
         Storage.saveTodoList(todoList);
     }
 
     static deleteProject(projectName) {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.deleteProject(projectName);
         Storage.saveTodoList(todoList);
     }
 
+    static renameProject(projectName, newProjectName) {
+        const todoList = Storage.getTodoList();
+        todoList.getProject(projectName).setName(newProjectName);
+        Storage.saveTodoList(todoList);
+    }
+
     static addTask(projectName, task) {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.getProject(projectName).addTask(task);
         Storage.saveTodoList(todoList);
     }
 
     static deleteTask(projectName, taskName) {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.getProject(projectName).deleteTask(taskName);
         Storage.saveTodoList(todoList);
     }
 
     static renameTask(projectName, taskName, newTaskName) {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.getProject(projectName).getTask(taskName).setName(newTaskName);
         Storage.saveTodoList(todoList);
     }
 
     static setTaskDescription(projectName, taskName, newDescription) {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList
             .getProject(projectName)
             .getTask(taskName)
@@ -72,13 +78,13 @@ export default class Storage {
     }
 
     static setTaskDate(projectName, taskName, newDueDate) {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.getProject(projectName).getTask(taskName).setDate(newDueDate);
         Storage.saveTodoList(todoList);
     }
 
     static setTaskCompletionStatus(projectName, taskName) {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList
             .getProject(projectName)
             .getTask(taskName)
@@ -87,19 +93,19 @@ export default class Storage {
     }
 
     static updateAllTasksProject() {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.updateAllTasksProject();
         Storage.saveTodoList(todoList);
     }
 
     static updateTodayProject() {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.updateTodayProject();
         Storage.saveTodoList(todoList);
     }
 
     static updateWeekProject() {
-        const todoList = Storage.getTodoList;
+        const todoList = Storage.getTodoList();
         todoList.updateWeekProject();
         Storage.saveTodoList(todoList);
     }
