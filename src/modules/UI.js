@@ -45,6 +45,7 @@ export default class UI {
         Storage.deleteProject(projectName);
         UI.clearProjects();
         UI.loadProjects();
+        UI.openProject('All Tasks', document.querySelector('#all-tasks'));
     }
 
     static appendButtonsToProjectButton(projectName, projectButton) {
@@ -56,16 +57,8 @@ export default class UI {
         removeProjectButton.classList.add('remove-project-button');
 
         projectNameContainer.innerText = projectName;
-
-        editProjectButton.style.backgroundImage = `url(${editImg})`;
-        editProjectButton.style.backgroundSize = 'cover';
-        editProjectButton.style.width = '2em';
-        editProjectButton.style.height = '2em';
-
-        removeProjectButton.style.backgroundImage = `url(${trashImg})`;
-        removeProjectButton.style.backgroundSize = 'cover';
-        removeProjectButton.style.width = '2em';
-        removeProjectButton.style.height = '2em';
+        editProjectButton.innerText = 'Edit';
+        removeProjectButton.innerText = 'Remove';
 
         editProjectButton.addEventListener('click', UI.editProject);
         removeProjectButton.addEventListener('click', UI.deleteProject);
@@ -246,6 +239,12 @@ export default class UI {
         buttons.forEach((button) => button.classList.remove('selected'));
         projectButton.classList.add('selected');
 
+        if (projectButton.classList.contains('sidebar-button')) {
+            document.querySelector('#add-task').style.display = 'none';
+        } else {
+            document.querySelector('#add-task').style.display = 'block';
+        }
+
         UI.loadProjectContent(projectName);
     }
 
@@ -258,6 +257,181 @@ export default class UI {
         const projectName = this.firstElementChild.innerText;
 
         UI.openProject(projectName, this);
+    }
+
+    // CREATE TASK
+
+    static clearTasks() {
+        const taskContainer = document.querySelector('#task');
+        taskContainer.innerHTML = '';
+    }
+
+    static loadTasks(projectName) {
+        Storage.getTodoList()
+            .getProject(projectName)
+            .getTasks()
+            .forEach((task) => UI.createTaskCard(task.name, task.dueDate));
+    }
+
+    static changeCompleteStatus() {
+        const projectName = document.querySelector('#main-header').innerText;
+        const taskName = this.parentElement.nextSibling.innerText;
+        Storage.setTaskCompletionStatus(projectName, taskName);
+    }
+
+    static createCheckBox(taskName) {
+        const div = document.createElement('div');
+        const checkbox = document.createElement('input');
+        const label = document.createElement('label');
+
+        div.classList.add('round');
+
+        checkbox.setAttribute('type', 'checkbox');
+        checkbox.setAttribute('id', `checkbox-${taskName}`);
+
+        label.setAttribute('for', `checkbox-${taskName}`);
+        label.addEventListener('click', UI.changeCompleteStatus);
+
+        div.append(checkbox, label);
+
+        return div;
+    }
+
+    static removeTask() {
+        const projectName = document.querySelector('#main-header').innerText;
+        const taskName =
+            this.previousSibling.previousSibling.previousSibling.innerText;
+        Storage.deleteTask(projectName, taskName);
+        UI.clearTasks();
+        UI.loadTasks(projectName);
+    }
+
+    static createTaskCardButtons(taskContainer, taskName, date) {
+        const checkBox = UI.createCheckBox(taskName);
+        const taskNameContainer = document.createElement('p');
+        const dateContainer = document.createElement('p');
+        const editTaskButton = document.createElement('button');
+        const removeTaskButton = document.createElement('button');
+
+        taskNameContainer.innerText = taskName;
+        dateContainer.innerText = date;
+
+        editTaskButton.classList.add('edit-task-button');
+        removeTaskButton.classList.add('remove-task-button');
+
+        editTaskButton.addEventListener('click', UI.openEditTaskForm);
+        removeTaskButton.addEventListener('click', UI.removeTask);
+
+        editTaskButton.style.backgroundImage = `url(${editImg})`;
+        editTaskButton.style.backgroundSize = 'cover';
+        editTaskButton.style.width = '2.8em';
+        editTaskButton.style.height = '2.8em';
+
+        removeTaskButton.style.backgroundImage = `url(${trashImg})`;
+        removeTaskButton.style.backgroundSize = 'cover';
+        removeTaskButton.style.width = '2.8em';
+        removeTaskButton.style.height = '2.8em';
+
+        taskContainer.append(
+            checkBox,
+            taskNameContainer,
+            dateContainer,
+            editTaskButton,
+            removeTaskButton
+        );
+    }
+
+    static createTaskCard(taskName, date) {
+        const taskContainer = document.createElement('div');
+
+        UI.createTaskCardButtons(taskContainer, taskName, date);
+
+        taskContainer.classList.add('taskCard');
+
+        document.querySelector('#task').appendChild(taskContainer);
+    }
+
+    // EDIT TASK FORM
+
+    static openEditTaskForm() {
+        const taskToEdit = this.parentElement;
+        const taskName =
+            this.previousElementSibling.previousElementSibling.innerText;
+        const task = Storage.getTodoList()
+            .getProject(document.querySelector('#main-header').innerText)
+            .getTask(taskName);
+        const editTaskSubmitButton = document.querySelector('#edit-submit');
+        const cancelEditTaskButton = document.querySelector('#edit-cancel');
+
+        editTaskSubmitButton.addEventListener('click', UI.editTask);
+        cancelEditTaskButton.addEventListener(
+            'click',
+            UI.cancelEditTaskSubmission
+        );
+
+        document.querySelector('#task-edit-title').value = task.name;
+        document.querySelector('#edit-description').value = task.description;
+        document.querySelector('#edit-date').value = task.dueDate;
+        document.querySelector('#overlay').classList.add('active');
+        document.querySelector('#myEditForm').style.display = 'block';
+
+        // Insert Form after taskToEdit
+        taskToEdit.parentNode.insertBefore(
+            document.querySelector('#myEditForm'),
+            taskToEdit.nextSibling
+        );
+    }
+
+    static editTask(e) {
+        e.preventDefault();
+
+        const projectName = document.querySelector('#main-header').innerText;
+        const taskToEdit =
+            this.parentElement.parentElement.parentElement
+                .previousElementSibling;
+        const taskName =
+            taskToEdit.firstElementChild.nextElementSibling.innerText;
+        const newTaskName = document.querySelector('#task-edit-title').value;
+        const newTaskDescription =
+            document.querySelector('#edit-description').value;
+        const newTaskDate = document.querySelector('#edit-date').value;
+
+        Storage.renameTask(
+            projectName,
+            taskName,
+            newTaskName,
+            newTaskDescription,
+            newTaskDate
+        );
+
+        UI.closeEditTaskForm();
+
+        UI.clearTasks();
+        UI.loadTasks(projectName);
+    }
+
+    static closeEditTaskForm() {
+        const myEditForm = document.querySelector('#myEditForm');
+
+        document.querySelector('#task-edit-title').value = '';
+        document.querySelector('#edit-description').value = '';
+        document.querySelector('#edit-date').value = '';
+        document.querySelector('#overlay').classList.remove('active');
+
+        myEditForm.style.display = 'none';
+
+        // Insert Form after addTaskForm to not delete it when clearing tasks
+        document
+            .querySelector('#myForm')
+            .parentNode.insertBefore(
+                myEditForm,
+                document.querySelector('#myForm').nextSibling
+            );
+    }
+
+    static cancelEditTaskSubmission(e) {
+        e.preventDefault();
+        UI.closeEditTaskForm();
     }
 
     // ADD TASK EVENT LISTENERS
@@ -273,11 +447,11 @@ export default class UI {
         document.querySelector('#myForm').style.display = 'block';
         document.querySelector('#task-title').focus();
 
-        const addTask = document.querySelector('#submit');
-        const cancelTaskSubmission = document.querySelector('#cancel');
+        const addTaskButton = document.querySelector('#submit');
+        const cancelTaskButton = document.querySelector('#cancel');
 
-        addTask.addEventListener('click', UI.addTask);
-        cancelTaskSubmission.addEventListener('click', UI.cancelTaskSubmission);
+        addTaskButton.addEventListener('click', UI.addTask);
+        cancelTaskButton.addEventListener('click', UI.cancelTaskSubmission);
     }
 
     static closeAddTaskForm() {
@@ -297,7 +471,7 @@ export default class UI {
         const date = document.querySelector('#date').value;
 
         Storage.addTask(projectName, new Task(taskName, description, date));
-        console.log(Storage.getTodoList().getProjects());
+        UI.createTaskCard(taskName, date);
         UI.closeAddTaskForm();
     }
 
