@@ -226,6 +226,9 @@ export default class UI {
         const mainHeader = document.querySelector('#main-header');
 
         mainHeader.innerText = projectName;
+
+        UI.clearTasks();
+        UI.loadTasks(projectName);
     }
 
     static openProject(projectName, projectButton) {
@@ -280,6 +283,10 @@ export default class UI {
     }
 
     static createCheckBox(taskName) {
+        const completeStatus = Storage.getTodoList()
+            .getProject(document.querySelector('#main-header').innerText)
+            .getTask(taskName)
+            .getCompleteStatus();
         const div = document.createElement('div');
         const checkbox = document.createElement('input');
         const label = document.createElement('label');
@@ -291,6 +298,10 @@ export default class UI {
 
         label.setAttribute('for', `checkbox-${taskName}`);
         label.addEventListener('click', UI.changeCompleteStatus);
+
+        if (completeStatus === true) {
+            checkbox.click();
+        }
 
         div.append(checkbox, label);
 

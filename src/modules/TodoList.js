@@ -56,14 +56,19 @@ export default class TodoList {
             const allTasks = project.getAllTasks();
             allTasks.forEach((task) => {
                 const taskName = `${task.getName()} (Project: ${project.getName()})`;
-                this.getProject('All Tasks').addTask(
-                    new Task(
+                if (task.complete === true) {
+                    const newTask = new Task(
                         taskName,
                         task.description,
-                        task.dueDate,
-                        task.complete
-                    )
-                );
+                        task.dueDate
+                    );
+                    newTask.toggleCompletionStatus();
+                    this.getProject('All Tasks').addTask(newTask);
+                } else {
+                    this.getProject('All Tasks').addTask(
+                        new Task(taskName, task.description, task.dueDate)
+                    );
+                }
             });
         });
     }
@@ -83,14 +88,19 @@ export default class TodoList {
             const todayTasks = project.getTasksToday();
             todayTasks.forEach((task) => {
                 const taskName = `${task.getName()} (Project: ${project.getName()})`;
-                this.getProject('Today').addTask(
-                    new Task(
+                if (task.complete === true) {
+                    const newTask = new Task(
                         taskName,
                         task.description,
-                        task.dueDate,
-                        task.complete
-                    )
-                );
+                        task.dueDate
+                    );
+                    newTask.toggleCompletionStatus();
+                    this.getProject('Today').addTask(newTask);
+                } else {
+                    this.getProject('Today').addTask(
+                        new Task(taskName, task.description, task.dueDate)
+                    );
+                }
             });
         });
     }
@@ -110,14 +120,19 @@ export default class TodoList {
             const weekTasks = project.getTasksThisWeek();
             weekTasks.forEach((task) => {
                 const taskName = `${task.getName()} (Project: ${project.getName()})`;
-                this.getProject('Today').addTask(
-                    new Task(
+                if (task.complete === true) {
+                    const newTask = new Task(
                         taskName,
                         task.description,
-                        task.dueDate,
-                        task.complete
-                    )
-                );
+                        task.dueDate
+                    );
+                    newTask.toggleCompletionStatus();
+                    this.getProject('This Week').addTask(newTask);
+                } else {
+                    this.getProject('This Week').addTask(
+                        new Task(taskName, task.description, task.dueDate)
+                    );
+                }
             });
         });
 
@@ -126,8 +141,8 @@ export default class TodoList {
                 .getTasks()
                 .sort((taskA, taskB) =>
                     compareAsc(
-                        toDate(new Date(taskA.getDateFormatted())),
-                        toDate(new Date(taskB.getDateFormatted()))
+                        toDate(new Date(taskA.getDate())),
+                        toDate(new Date(taskB.getDate()))
                     )
                 )
         );
