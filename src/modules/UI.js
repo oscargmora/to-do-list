@@ -5,19 +5,12 @@ import editImg from '../img/pencil.png';
 import trashImg from '../img/trash-bin.png';
 
 export default class UI {
+    // LOAD CONTENT
+
     static loadHomepage() {
-        UI.initAddProjectButtons();
+        UI.loadProjects();
         UI.initProjectButtons();
-        UI.initEditProjectButtons();
-        UI.initAddTaskButtons();
         UI.openProject('All Tasks', document.querySelector('#all-tasks'));
-    }
-
-    // CREATE PROJECT
-
-    static clearProjects() {
-        const projects = document.querySelectorAll('.sidebar-project-button');
-        projects.forEach((project) => project.remove());
     }
 
     static loadProjects() {
@@ -32,6 +25,40 @@ export default class UI {
                     return;
                 UI.createProjectButton(project.name);
             });
+        UI.initAddProjectButtons();
+        UI.initEditProjectButtons();
+    }
+
+    static loadProjectContent(projectName) {
+        const mainHeader = document.querySelector('#main-header');
+
+        mainHeader.innerText = projectName;
+
+        UI.clearTasks();
+        UI.loadTasks(projectName);
+    }
+
+    static loadTasks(projectName) {
+        Storage.getTodoList()
+            .getProject(projectName)
+            .getTasks()
+            .forEach((task) =>
+                UI.createTaskCard(projectName, task.name, task.dueDate)
+            );
+        if (
+            projectName !== 'All Tasks' &&
+            projectName !== 'Today' &&
+            projectName !== 'This Week'
+        ) {
+            UI.initAddTaskButtons();
+        }
+    }
+
+    // CREATE PROJECT
+
+    static clearProjects() {
+        const projects = document.querySelectorAll('.sidebar-project-button');
+        projects.forEach((project) => project.remove());
     }
 
     static editProject(e) {
@@ -136,7 +163,8 @@ export default class UI {
     static addProjectEdit(e) {
         e.preventDefault();
 
-        const projectToEdit = this.parentElement.parentElement.previousSibling;
+        const projectToEdit =
+            this.parentElement.parentElement.previousSibling.firstElementChild;
         const projectName = projectToEdit.innerText;
         const newProjectName = document.querySelector(
             '#edit-project-input'
@@ -221,15 +249,6 @@ export default class UI {
         UI.openProject('This Week', this);
     }
 
-    static loadProjectContent(projectName) {
-        const mainHeader = document.querySelector('#main-header');
-
-        mainHeader.innerText = projectName;
-
-        UI.clearTasks();
-        UI.loadTasks(projectName);
-    }
-
     static openProject(projectName, projectButton) {
         const defaultProjectButtons =
             document.querySelectorAll('.sidebar-buttons');
@@ -266,15 +285,6 @@ export default class UI {
     static clearTasks() {
         const taskContainer = document.querySelector('#task');
         taskContainer.innerHTML = '';
-    }
-
-    static loadTasks(projectName) {
-        Storage.getTodoList()
-            .getProject(projectName)
-            .getTasks()
-            .forEach((task) =>
-                UI.createTaskCard(projectName, task.name, task.dueDate)
-            );
     }
 
     static changeCompleteStatus() {
