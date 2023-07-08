@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import Project from './Project';
 import Task from './Task';
 import Storage from './Storage';
@@ -273,7 +272,9 @@ export default class UI {
         Storage.getTodoList()
             .getProject(projectName)
             .getTasks()
-            .forEach((task) => UI.createTaskCard(task.name, task.dueDate));
+            .forEach((task) =>
+                UI.createTaskCard(projectName, task.name, task.dueDate)
+            );
     }
 
     static changeCompleteStatus() {
@@ -282,7 +283,7 @@ export default class UI {
         Storage.setTaskCompletionStatus(projectName, taskName);
     }
 
-    static createCheckBox(taskName) {
+    static createCheckBox(projectName, taskName) {
         const completeStatus = Storage.getTodoList()
             .getProject(document.querySelector('#main-header').innerText)
             .getTask(taskName)
@@ -303,6 +304,15 @@ export default class UI {
             checkbox.click();
         }
 
+        if (
+            projectName === 'All Tasks' ||
+            projectName === 'Today' ||
+            projectName === 'This Week'
+        ) {
+            checkbox.disabled = true;
+            label.classList.add('disabled-checkbox');
+        }
+
         div.append(checkbox, label);
 
         return div;
@@ -317,8 +327,8 @@ export default class UI {
         UI.loadTasks(projectName);
     }
 
-    static createTaskCardButtons(taskContainer, taskName, date) {
-        const checkBox = UI.createCheckBox(taskName);
+    static createTaskCardButtons(taskContainer, projectName, taskName, date) {
+        const checkBox = UI.createCheckBox(projectName, taskName);
         const taskNameContainer = document.createElement('p');
         const dateContainer = document.createElement('p');
         const editTaskButton = document.createElement('button');
@@ -343,19 +353,27 @@ export default class UI {
         removeTaskButton.style.width = '2.8em';
         removeTaskButton.style.height = '2.8em';
 
-        taskContainer.append(
-            checkBox,
-            taskNameContainer,
-            dateContainer,
-            editTaskButton,
-            removeTaskButton
-        );
+        if (
+            projectName === 'All Tasks' ||
+            projectName === 'Today' ||
+            projectName === 'This Week'
+        ) {
+            taskContainer.append(checkBox, taskNameContainer, dateContainer);
+        } else {
+            taskContainer.append(
+                checkBox,
+                taskNameContainer,
+                dateContainer,
+                editTaskButton,
+                removeTaskButton
+            );
+        }
     }
 
-    static createTaskCard(taskName, date) {
+    static createTaskCard(projectName, taskName, date) {
         const taskContainer = document.createElement('div');
 
-        UI.createTaskCardButtons(taskContainer, taskName, date);
+        UI.createTaskCardButtons(taskContainer, projectName, taskName, date);
 
         taskContainer.classList.add('taskCard');
 
@@ -482,7 +500,7 @@ export default class UI {
         const date = document.querySelector('#date').value;
 
         Storage.addTask(projectName, new Task(taskName, description, date));
-        UI.createTaskCard(taskName, date);
+        UI.createTaskCard(projectName, taskName, date);
         UI.closeAddTaskForm();
     }
 

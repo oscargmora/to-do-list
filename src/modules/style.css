@@ -503,6 +503,7 @@ main-content {
     border: #b9bcbe 2px solid;
     border-radius: 12px;
     position: relative;
+    height: 2.5em;
 }
 
 .taskCard label {
@@ -515,6 +516,10 @@ main-content {
     position: absolute;
     top: 15px;
     width: 36px;
+}
+
+.taskCard label.disabled-checkbox {
+    cursor: default;
 }
 
 .taskCard label:after {
