@@ -5,9 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>To-Do List</title>
-        <script defer src="runtime.bundle.js"></script>
-        <script defer src="index.bundle.js"></script>
-    </head>
+    <script defer src="runtime.bundle.js"></script><script defer src="index.bundle.js"></script></head>
     <body>
         <header>
             <img src="684fa3f354ab8d49d908.png" class="header-img" />
@@ -21,22 +19,19 @@
                     >Home
                     <hr />
                     <button
-                        class="sidebar-buttons main-header-title selected"
+                        class="sidebar-button main-header-title selected"
                         id="all-tasks"
                     >
-                        All Tasks
+                        <p>All Tasks</p>
+                    </button>
+                    <button class="sidebar-button main-header-title" id="today">
+                        <p>Today</p>
                     </button>
                     <button
-                        class="sidebar-buttons main-header-title"
-                        id="today"
-                    >
-                        Today
-                    </button>
-                    <button
-                        class="sidebar-buttons main-header-title"
+                        class="sidebar-button main-header-title"
                         id="this-week"
                     >
-                        This Week
+                        <p>This Week</p>
                     </button>
                 </container>
                 <container class="sidebar-container" id="projects"
@@ -90,7 +85,7 @@
                             </container>
                         </form>
                     </div>
-                    <button class="sidebar-buttons" id="add-project">
+                    <button class="sidebar-button" id="add-project">
                         Add Project
                     </button>
                 </container>
@@ -109,6 +104,7 @@
                                     type="text"
                                     id="task-title"
                                     placeholder="Enter Task Here"
+                                    maxlength="30"
                                 />
                                 <textarea
                                     name="description"
@@ -150,7 +146,8 @@
                                 <input type="date" id="edit-date" name="date" />
                                 <div class="task-form-button-div">
                                     <button
-                                        class="task-form-button edit-submit"
+                                        class="task-form-button"
+                                        id="edit-submit"
                                     >
                                         Submit
                                     </button>
