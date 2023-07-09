@@ -142,6 +142,7 @@ export default class UI {
     }
 
     static closeProjectForm() {
+        console.log('closed');
         document.querySelector('#project-form').classList.add('hidden');
         document.querySelector('#project-input').value = '';
     }

@@ -353,8 +353,8 @@ main {
     display: none;
     position: fixed;
     left: 50%;
-    top: 25%;
-    transform: translate(-50%, 5%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 9;
     border-radius: 10px;
 }
@@ -590,4 +590,13 @@ footer {
 #github-link:hover {
     color: #d2d4d5;
     text-decoration: none;
+}
+
+/* Styling for Phone */
+
+@media (max-width: 540px) {
+    main {
+        display: flex;
+        flex-direction: column;
+    }
 }
