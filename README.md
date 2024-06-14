@@ -16,7 +16,6 @@
     Please see the live demo link above to review the finished product!
     <br />
     <br />
-    <br />
     <a href="https://github.com/oscargmora/to-do-list"><strong>Explore the docs »</strong></a>
     <br />
     <br />
